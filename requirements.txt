@@ -1,10 +1,2 @@
-altgraph>=0.17.4
-argon2-cffi>=23.1.0
-argon2-cffi-bindings>=21.2.0
-cffi>=1.16.0
 cryptography>=41.0.5
-packaging>=23.2
-pycparser>=2.21
-pyinstaller>=6.2.0
-pyinstaller-hooks-contrib>=2023.10
 tqdm>=4.66.1
