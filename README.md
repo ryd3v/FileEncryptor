@@ -3,7 +3,7 @@
 ## Overview
 
 This File Encryption Program is a Python-based tool designed to securely encrypt and decrypt large files using a
-password-derived key. It employs robust cryptographic methods, including the Argon2 algorithm for key derivation and
+password-derived key. It employs robust cryptographic methods, including PBKDF2 with SHA-256 for key derivation and
 AES-GCM for encryption, making it suitable for processing large files efficiently.
 
 ## Features
@@ -22,7 +22,6 @@ AES-GCM for encryption, making it suitable for processing large files efficientl
 
 - Python 3.x
 - Cryptography library
-- Argon2 library
 
 ## Installation
 
