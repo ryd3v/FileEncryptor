@@ -18,6 +18,8 @@ AES-GCM for encryption, making it suitable for processing large files efficientl
 - **Secure Key Management**: Securely stores the encryption key in an encrypted file, ensuring access only for the
   password holder.
 
+![ALT](Screenshot.png)
+
 ## Requirements
 
 - Python 3.x
