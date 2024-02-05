@@ -30,12 +30,12 @@ def encrypt_key_file(key: bytes, password: str):
     nonce = os.urandom(12)
 
     encrypted_key = aesgcm.encrypt(nonce, key, None)
-    with open('key_file', 'wb') as file:
+    with open('key', 'wb') as file:
         file.write(salt + nonce + encrypted_key)
 
 
 def decrypt_key_file(password: str) -> bytes:
-    with open('key_file', 'rb') as file:
+    with open('key', 'rb') as file:
         salt = file.read(16)
         nonce = file.read(12)
         encrypted_key = file.read()
@@ -96,7 +96,7 @@ def decrypt_file(file_path: str, key: bytes):
                     output_file.write(decrypted_chunk)
                     pbar.update(len(encrypted_chunk) - tag_length)
 
-    print(f"File {file_path} has been decrypted to {decrypted_file_path}.")
+    print(f"File {file_path} has been decrypted to {decrypted_file_path}")
 
 
 def main():
@@ -107,7 +107,7 @@ def main():
     mode = sys.argv[1].lower()
     file_path = sys.argv[2]
 
-    if not os.path.exists('key_file'):
+    if not os.path.exists('key'):
         password = getpass.getpass(prompt="Enter a password to generate your key: ")
         master_key, _ = generate_key(password)  # Generate a raw key suitable for AESGCM
         encrypt_key_file(master_key, password)
