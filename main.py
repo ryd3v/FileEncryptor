@@ -66,7 +66,7 @@ def encrypt_file(file_path: str, key: bytes):
                     output_file.write(encrypted_chunk)
                     pbar.update(len(chunk))
 
-    print(f"File {file_path} has been encrypted to {encrypted_file_path}.")
+    print(f"File {file_path} has been encrypted to {encrypted_file_path}")
 
 
 def decrypt_file(file_path: str, key: bytes):
