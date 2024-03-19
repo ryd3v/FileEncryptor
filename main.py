@@ -1,3 +1,5 @@
+# V2.0.1
+# 2024 Ryan Collins
 import getpass
 import os
 import sys
@@ -11,7 +13,8 @@ from tqdm import tqdm
 
 def generate_key(password: str, salt: bytes = None) -> (bytes, bytes):
     if salt is None:
-        salt = os.urandom(16)
+        # Update salt to 32-byte (256-bit)
+        salt = os.urandom(32)
 
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
@@ -36,7 +39,7 @@ def encrypt_key_file(key: bytes, password: str):
 
 def decrypt_key_file(password: str) -> bytes:
     with open('key', 'rb') as file:
-        salt = file.read(16)
+        salt = file.read(32) # Read 32 bytes for salt
         nonce = file.read(12)
         encrypted_key = file.read()
 
