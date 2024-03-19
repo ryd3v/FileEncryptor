@@ -70,3 +70,52 @@ Navigate to the program's directory in the command line and use the following co
 ## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Detailed breakdown
+
+1. Key Generation (generate_key function):
+
+    - The generate_key function takes a password string and an optional salt as input.
+    - If no salt is provided, a random 32-byte salt is generated using os.urandom(32).
+    - The function then uses the PBKDF2-HMAC-SHA256 key derivation function to derive a 32-byte key from the password and salt. PBKDF2 applies a pseudo-random function to the input password multiple times (specified by the iterations parameter) to generate a derived key.
+    - The derived key and the salt used for key derivation are returned as a tuple.
+
+2. Key Encryption (encrypt_key_file function):
+
+   - The encrypt_key_file function takes a key and a password as input.
+   - It generates a new key and salt pair using the provided password and the generate_key function.
+   - It then uses the generated key to encrypt the original key (provided as input) using AES-GCM (Galois/Counter Mode), which is an authenticated encryption mode.
+   - The salt, nonce (a unique value used once), and the encrypted key are written to a file named "key". The salt and nonce are prepended to the encrypted key to ensure that they are available during decryption.
+
+3. Key Decryption (decrypt_key_file function):
+
+   - The decrypt_key_file function takes a password as input.
+   - It reads the salt, nonce, and encrypted key from the "key" file.
+   - It uses the provided password and salt to generate the key using the generate_key function.
+   - It then decrypts the encrypted key using AES-GCM and returns the decrypted key.
+
+4. File Encryption (encrypt_file function):
+
+   - The encrypt_file function takes a file path and a key as input.
+   - It uses the provided key to encrypt the contents of the specified file using AES-GCM.
+   - The encrypted file is written to a new file with the ".enc" extension appended to the original file name.
+   - Progress of the encryption process is displayed using the tqdm library, which provides a progress bar.
+
+5. File Decryption (decrypt_file function):
+
+   - The decrypt_file function takes a file path and a key as input.
+   - It reads the contents of the specified encrypted file.
+   - It extracts the nonce from the beginning of the file.
+   - It uses the provided key and nonce to decrypt the file contents using AES-GCM.
+   - The decrypted file is written to a new file with the ".enc" extension removed from the original file name.
+   - Progress of the decryption process is displayed using the tqdm library.
+
+6. Main Functionality (main function):
+
+   - The main function serves as the entry point of the program.
+   - It checks the command-line arguments to determine whether to encrypt or decrypt a file.
+   - If the "key" file does not exist, it prompts the user to enter a password to generate the key and encrypt it.
+   - If the "key" file exists, it prompts the user to enter a password to decrypt the key.
+   - It then performs the specified encryption or decryption operation on the specified file using the derived key.
+
+Overall, the program provides functionality for securely generating keys from passwords, encrypting and decrypting files using those keys, and handling user input securely. It follows best practices for key management and encryption, making it suitable for protecting sensitive data.
