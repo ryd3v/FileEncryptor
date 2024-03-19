@@ -119,3 +119,12 @@ Navigate to the program's directory in the command line and use the following co
    - It then performs the specified encryption or decryption operation on the specified file using the derived key.
 
 Overall, the program provides functionality for securely generating keys from passwords, encrypting and decrypting files using those keys, and handling user input securely. It follows best practices for key management and encryption, making it suitable for protecting sensitive data.
+
+## Key file 
+The "key" file contains the encrypted `master key`, which is derived from the user-provided password using a key derivation function (KDF) with a salt. This `master key` is then used to encrypt and decrypt files using the AES-GCM symmetric encryption algorithm.
+
+However, the master key itself cannot be directly used to decrypt files. Instead, it needs to be decrypted first using the correct password provided by the user. Once the `master key` is successfully decrypted, it can be used to perform encryption and decryption operations on files.
+
+This approach adds an additional layer of security because even if an attacker gains access to the encrypted `master key`, they would still need the correct password to decrypt it and gain access to the actual encryption/decryption functionality.
+
+In summary, the `master key` serves as the key to unlock the encryption/decryption capabilities of the program, but it requires the correct password to be usable. Without the password, the `master key` remains securely encrypted and unusable for decryption purposes.
