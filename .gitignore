@@ -2,3 +2,5 @@
 /dist/
 /venv/
 .venv
+main.py
+.DS_Store

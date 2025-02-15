@@ -1,10 +1,10 @@
-# V2.0.1
-# 2024 Ryan Collins
+# V2.0.2 (Updated for Apple Silicon compatibility)
+# 2025 Ryan Collins
+
 import getpass
 import os
 import sys
 
-from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -13,15 +13,15 @@ from tqdm import tqdm
 
 def generate_key(password: str, salt: bytes = None) -> (bytes, bytes):
     if salt is None:
-        # Update salt to 32-byte (256-bit)
+        # Use a 32-byte (256-bit) salt
         salt = os.urandom(32)
 
+    # Note: The backend parameter is omitted for compatibility with recent cryptography versions.
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
         iterations=750000,
-        backend=default_backend()
     )
     key = kdf.derive(password.encode())
     return key, salt
@@ -39,7 +39,7 @@ def encrypt_key_file(key: bytes, password: str):
 
 def decrypt_key_file(password: str) -> bytes:
     with open('key', 'rb') as file:
-        salt = file.read(32) # Read 32 bytes for salt
+        salt = file.read(32)  # Read 32 bytes for salt
         nonce = file.read(12)
         encrypted_key = file.read()
 
