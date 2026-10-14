@@ -33,12 +33,12 @@ def encrypt_key_file(key: bytes, password: str):
     nonce = os.urandom(12)
 
     encrypted_key = aesgcm.encrypt(nonce, key, None)
-    with open('key', 'wb') as file:
+    with open("key", "wb") as file:
         file.write(salt + nonce + encrypted_key)
 
 
 def decrypt_key_file(password: str) -> bytes:
-    with open('key', 'rb') as file:
+    with open("key", "rb") as file:
         salt = file.read(32)  # Read 32 bytes for salt
         nonce = file.read(12)
         encrypted_key = file.read()
@@ -57,10 +57,12 @@ def encrypt_file(file_path: str, key: bytes):
 
     total_size = os.path.getsize(file_path)
 
-    with open(file_path, 'rb') as input_file:
-        with open(encrypted_file_path, 'wb') as output_file:
+    with open(file_path, "rb") as input_file:
+        with open(encrypted_file_path, "wb") as output_file:
             output_file.write(nonce)
-            with tqdm(total=total_size, unit='B', unit_scale=True, desc="Encrypting") as pbar:
+            with tqdm(
+                total=total_size, unit="B", unit_scale=True, desc="Encrypting"
+            ) as pbar:
                 while True:
                     chunk = input_file.read(chunk_size)
                     if len(chunk) == 0:
@@ -85,12 +87,14 @@ def decrypt_file(file_path: str, key: bytes):
 
     total_size = os.path.getsize(file_path)
 
-    with open(file_path, 'rb') as input_file:
+    with open(file_path, "rb") as input_file:
         nonce = input_file.read(12)
         total_size -= len(nonce)
 
-        with open(decrypted_file_path, 'wb') as output_file:
-            with tqdm(total=total_size, unit='B', unit_scale=True, desc="Decrypting") as pbar:
+        with open(decrypted_file_path, "wb") as output_file:
+            with tqdm(
+                total=total_size, unit="B", unit_scale=True, desc="Decrypting"
+            ) as pbar:
                 while True:
                     encrypted_chunk = input_file.read(chunk_size + tag_length)
                     if len(encrypted_chunk) == 0:
@@ -110,7 +114,7 @@ def main():
     mode = sys.argv[1].lower()
     file_path = sys.argv[2]
 
-    if not os.path.exists('key'):
+    if not os.path.exists("key"):
         password = getpass.getpass(prompt="Enter a password to generate your key: ")
         master_key, _ = generate_key(password)  # Generate a raw key suitable for AESGCM
         encrypt_key_file(master_key, password)
@@ -122,12 +126,12 @@ def main():
             print(f"Error decrypting key: wrong password? {e}")
             return
 
-    if mode == 'encrypt':
+    if mode == "encrypt":
         if os.path.isfile(file_path):
             encrypt_file(file_path, master_key)
         else:
             print("File not found.")
-    elif mode == 'decrypt':
+    elif mode == "decrypt":
         if os.path.isfile(file_path):
             decrypt_file(file_path, master_key)
         else:
